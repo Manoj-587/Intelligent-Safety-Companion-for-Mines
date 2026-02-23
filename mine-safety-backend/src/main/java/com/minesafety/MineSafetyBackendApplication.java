@@ -9,6 +9,5 @@ public class MineSafetyBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(MineSafetyBackendApplication.class, args);
         System.out.print("Hello");
-        System.out.print("World");
     }
 }

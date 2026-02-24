@@ -1,42 +1,33 @@
 package com.minesafety.entity;
 
-import com.minesafety.enums.Role;
 import com.minesafety.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "mine_units")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class MineUnit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "full_name", nullable = false, length = 100)
-    private String fullName;
+    @Column(name = "unit_name", nullable = false, length = 100)
+    private String unitName;
 
-    @Column(nullable = false, unique = true, length = 150)
-    private String email;
+    @Column(length = 150)
+    private String location;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
-    @Column(name = "phone_number", length = 15)
-    private String phoneNumber;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -45,8 +36,4 @@ public class User {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 }

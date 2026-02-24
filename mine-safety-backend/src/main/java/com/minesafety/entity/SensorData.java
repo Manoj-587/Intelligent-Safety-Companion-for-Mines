@@ -21,8 +21,12 @@ public class SensorData {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mine_unit_id", nullable = false)
-    private MineUnit mineUnit;
+    @JoinColumn(name = "mine_id", nullable = false)
+    private Mine mine;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zone_id", nullable = false)
+    private Zone zone;
 
     @Column(name = "methane_level", nullable = false)
     private Double methaneLevel;

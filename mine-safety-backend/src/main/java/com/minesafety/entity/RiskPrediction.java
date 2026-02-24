@@ -1,7 +1,5 @@
 package com.minesafety.entity;
 
-import com.minesafety.enums.AlertStatus;
-import com.minesafety.enums.AlertType;
 import com.minesafety.enums.RiskLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,11 +10,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "alerts")
+@Table(name = "risk_predictions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Alert {
+public class RiskPrediction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,28 +33,25 @@ public class Alert {
     private Zone zone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "alert_type", nullable = false)
-    private AlertType alertType;
+    @Column(name = "predicted_risk", nullable = false)
+    private RiskLevel predictedRisk;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "risk_level", nullable = false)
-    private RiskLevel riskLevel;
+    @Column(name = "probability_safe")
+    private Double probabilitySafe;
 
-    @Column(nullable = false)
-    private String message;
+    @Column(name = "probability_warning")
+    private Double probabilityWarning;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AlertStatus status = AlertStatus.ACTIVE;
+    @Column(name = "probability_critical")
+    private Double probabilityCritical;
+
+    @Column(name = "overall_risk_score", nullable = false)
+    private Double overallRiskScore;
+
+    @Column(name = "model_version", length = 50)
+    private String modelVersion;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "resolved_at")
-    private LocalDateTime resolvedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resolved_by")
-    private User resolvedBy;
+    @Column(name = "prediction_time", nullable = false, updatable = false)
+    private LocalDateTime predictionTime;
 }

@@ -1,6 +1,5 @@
 package com.minesafety.entity;
 
-import com.minesafety.enums.Role;
 import com.minesafety.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,31 +11,36 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "mines")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Mine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "full_name", nullable = false, length = 100)
-    private String fullName;
+    @Column(name = "mine_code", nullable = false, unique = true, length = 50)
+    private String mineCode;
 
-    @Column(nullable = false, unique = true, length = 150)
-    private String email;
+    @Column(name = "mine_name", nullable = false, length = 150)
+    private String mineName;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(nullable = false, length = 150)
+    private String location;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @Column(length = 100)
+    private String district;
 
-    @Column(name = "phone_number", length = 15)
-    private String phoneNumber;
+    @Column(length = 100)
+    private String state;
+
+    @Column(name = "total_area")
+    private Double totalArea;
+
+    @Column
+    private Double depth;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

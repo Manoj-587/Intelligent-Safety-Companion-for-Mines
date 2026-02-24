@@ -1,7 +1,7 @@
 package com.minesafety.entity;
 
-import com.minesafety.enums.Role;
 import com.minesafety.enums.Status;
+import com.minesafety.enums.ZoneType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,31 +12,38 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "zones")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "full_name", nullable = false, length = 100)
-    private String fullName;
+    @Column(name = "zone_code", nullable = false, unique = true, length = 50)
+    private String zoneCode;
 
-    @Column(nullable = false, unique = true, length = 150)
-    private String email;
+    @Column(name = "zone_name", nullable = false, length = 150)
+    private String zoneName;
 
-    @Column(nullable = false)
-    private String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mine_id", nullable = false)
+    private Mine mine;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @Column(name = "zone_type", nullable = false)
+    private ZoneType zoneType = ZoneType.GENERAL;
 
-    @Column(name = "phone_number", length = 15)
-    private String phoneNumber;
+    @Column(name = "max_safe_temperature")
+    private Double maxSafeTemperature;
+
+    @Column(name = "min_safe_oxygen")
+    private Double minSafeOxygen;
+
+    @Column(name = "max_safe_methane")
+    private Double maxSafeMethane;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

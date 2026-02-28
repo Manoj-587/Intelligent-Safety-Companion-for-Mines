@@ -28,6 +28,12 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public User updateUser(Long id, User user) {
+        User existing = getUserById(id);
+        user.setId(existing.getId());
+        return repository.save(user);
+    }
+
     public void deleteUser(Long id) {
         repository.deleteById(id);
     }

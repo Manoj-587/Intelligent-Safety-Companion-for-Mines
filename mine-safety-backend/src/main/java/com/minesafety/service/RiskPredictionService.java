@@ -34,6 +34,10 @@ public class RiskPredictionService {
         return repository.save(riskPrediction);
     }
 
+    public List<RiskPrediction> getByMine(Long mineId) {
+        return repository.findByMineId(mineId);
+    }
+
     public void delete(Long id) {
         repository.deleteById(id);
     }

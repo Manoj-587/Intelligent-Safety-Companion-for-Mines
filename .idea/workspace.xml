@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d1aa8060-3b68-4161-a6f2-b2d8d5299225" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/AlertController.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/AlertController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/dto/AuthResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/dto/AuthResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/AlertRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/AlertRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AlertService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AlertService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/DataSimulatorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/DataSimulatorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/SensorDataService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/SensorDataService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/AuthContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Alerts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Alerts.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Profile.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="3A6yEwafQy51e59p84teEOVHnoF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.MineSafetyBackendApplication.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "kk",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Intelligent_Safety_Companion_for_Mines/Intelligent-Safety-Companion-for-Mines",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="MineSafetyBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="mine-safety-backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.minesafety.MineSafetyBackendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d1aa8060-3b68-4161-a6f2-b2d8d5299225" name="Changes" comment="" />
+      <created>1771927206908</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771927206908</updated>
+      <workItem from="1771927209279" duration="129000" />
+      <workItem from="1775450946860" duration="21316000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -23,8 +23,13 @@ public class AlertController {
     }
 
     @GetMapping
-    public List<Alert> getAll() {
-        return service.getAll();
+    public List<Alert> getAll(@RequestParam(required = false) Long mineId) {
+        return mineId != null ? service.getByMine(mineId) : service.getAll();
+    }
+
+    @GetMapping("/by-mine/{mineId}")
+    public List<Alert> getByMine(@PathVariable Long mineId) {
+        return service.getByMine(mineId);
     }
 
     @GetMapping("/{id}")

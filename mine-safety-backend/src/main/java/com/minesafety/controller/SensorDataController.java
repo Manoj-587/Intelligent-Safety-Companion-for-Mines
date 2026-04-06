@@ -27,6 +27,11 @@ public class SensorDataController {
         return service.getAll();
     }
 
+    @GetMapping("/by-mine/{mineId}")
+    public List<SensorData> getByMine(@PathVariable Long mineId) {
+        return service.getByMine(mineId);
+    }
+
     @GetMapping("/{id}")
     public SensorData getById(@PathVariable Long id) {
         return service.getById(id);

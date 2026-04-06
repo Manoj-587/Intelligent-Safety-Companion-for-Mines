@@ -23,6 +23,10 @@ public class AlertService {
         return repository.findAll();
     }
 
+    public List<Alert> getByMine(Long mineId) {
+        return repository.findByMineId(mineId);
+    }
+
     public Alert getById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Alert not found"));

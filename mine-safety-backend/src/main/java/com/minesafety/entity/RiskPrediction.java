@@ -1,5 +1,6 @@
 package com.minesafety.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.minesafety.enums.RiskLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,14 +23,17 @@ public class RiskPrediction {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sensor_data_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private SensorData sensorData;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mine_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Mine mine;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zone_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Zone zone;
 
     @Enumerated(EnumType.STRING)

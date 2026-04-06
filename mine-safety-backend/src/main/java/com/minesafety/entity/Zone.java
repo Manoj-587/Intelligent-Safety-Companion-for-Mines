@@ -1,5 +1,6 @@
 package com.minesafety.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.minesafety.enums.Status;
 import com.minesafety.enums.ZoneType;
 import jakarta.persistence.*;
@@ -30,6 +31,7 @@ public class Zone {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mine_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Mine mine;
 
     @Enumerated(EnumType.STRING)

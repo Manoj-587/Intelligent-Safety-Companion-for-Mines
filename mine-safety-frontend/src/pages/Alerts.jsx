@@ -15,7 +15,11 @@ export default function Alerts() {
   const [editId, setEditId] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  const load = () => Promise.all([api.get('/alerts'), api.get('/mines'), api.get('/zones'), api.get('/sensor-data')]).then(([a, m, z, s]) => { setAlerts(a.data); setMines(m.data); setZones(z.data); setSensors(s.data); });
+  const assignedMineId = user?.assignedMineId;
+  const isRestricted = user?.role === 'WORKER' || user?.role === 'SUPERVISOR';
+  const alertsUrl = isRestricted && assignedMineId ? `/alerts?mineId=${assignedMineId}` : '/alerts';
+
+  const load = () => Promise.all([api.get(alertsUrl), api.get('/mines'), api.get('/zones'), api.get('/sensor-data')]).then(([a, m, z, s]) => { setAlerts(a.data); setMines(m.data); setZones(z.data); setSensors(s.data); });
   useEffect(() => { load(); }, []);
 
   const handleSubmit = async (e) => {

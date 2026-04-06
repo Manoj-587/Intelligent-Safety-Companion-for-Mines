@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Line } from 'react-chartjs-2';
 import {
@@ -199,7 +199,7 @@ function SupervisorDashboard() {
       const mineId = user?.assignedMineId;
 
       const [alertsRes, sensorsRes, risksRes] = await Promise.all([
-        api.get('/alerts'),
+        mineId ? api.get(`/alerts/by-mine/${mineId}`) : api.get('/alerts'),
         mineId ? api.get(`/sensor-data/by-mine/${mineId}`) : api.get('/sensor-data'),
         mineId ? api.get(`/risk-predictions/by-mine/${mineId}`) : api.get('/risk-predictions'),
       ]);
@@ -208,16 +208,15 @@ function SupervisorDashboard() {
         api.get(`/mines/${mineId}`).then(r => setAssignedMine(r.data)).catch(() => {});
       }
 
-      const active = alertsRes.data.filter(a => a.status === 'ACTIVE');
-      const filteredAlerts = mineId ? active.filter(a => a.mine?.id === mineId) : active;
+      const activeAlerts = alertsRes.data.filter(a => a.status === 'ACTIVE');
 
       setStats({
-        activeAlerts: filteredAlerts.length,
-        warningAlerts: filteredAlerts.filter(a => a.riskLevel === 'WARNING').length,
+        activeAlerts: activeAlerts.length,
+        warningAlerts: activeAlerts.filter(a => a.riskLevel === 'WARNING').length,
         criticalRisks: risksRes.data.filter(r => r.predictedRisk === 'CRITICAL').length,
         sensors: sensorsRes.data.length,
       });
-      setRecentAlerts(filteredAlerts.slice(0, 5));
+      setRecentAlerts(activeAlerts.slice(0, 5));
       setMineSensors(sensorsRes.data.slice(-20));
     } catch (e) {
       console.error(e);
@@ -322,18 +321,27 @@ function SupervisorDashboard() {
 
 // ─── WORKER DASHBOARD ────────────────────────────────────────────────────────
 function WorkerDashboard() {
+  const { user } = useAuth();
   const [latestSensor, setLatestSensor] = useState(null);
   const [activeAlerts, setActiveAlerts] = useState([]);
+  const [assignedMine, setAssignedMine] = useState(null);
   const [loading, setLoading] = useState(true);
+  const assignedMineRef = useRef(null);
 
   const fetchData = async () => {
     try {
+      const mineId = user?.assignedMineId;
       const [sensorsRes, alertsRes] = await Promise.all([
-        api.get('/sensor-data'),
-        api.get('/alerts'),
+        mineId ? api.get(`/sensor-data/by-mine/${mineId}`) : api.get('/sensor-data'),
+        mineId ? api.get(`/alerts/by-mine/${mineId}`) : api.get('/alerts'),
       ]);
+
+      if (mineId && !assignedMineRef.current) {
+        api.get(`/mines/${mineId}`).then(r => { assignedMineRef.current = r.data; setAssignedMine(r.data); }).catch(() => {});
+      }
+
       const sensors = sensorsRes.data;
-      setLatestSensor(sensors.length > 0 ? sensors[sensors.length - 1] : null);
+      setLatestSensor(sensors.length > 0 ? sensors[0] : null);
       setActiveAlerts(alertsRes.data.filter(a => a.status === 'ACTIVE').slice(0, 5));
     } catch (e) {
       console.error(e);
@@ -390,7 +398,7 @@ function WorkerDashboard() {
       </motion.div>
 
       {latestSensor && (
-        <motion.div className="stat-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ padding: '1.5rem', marginBottom: '2rem' }}>
+        <motion.div className="stat-card" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
           <h3 style={{ marginBottom: '1rem' }}>Latest Sensor Reading</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
             {[

@@ -10,4 +10,5 @@ import java.util.List;
 public interface AlertRepo extends JpaRepository<Alert, Long> {
     List<Alert> findByZoneAndStatus(Zone zone, AlertStatus status);
     List<Alert> findByStatus(AlertStatus status);
+    List<Alert> findByMineId(Long mineId);
 }

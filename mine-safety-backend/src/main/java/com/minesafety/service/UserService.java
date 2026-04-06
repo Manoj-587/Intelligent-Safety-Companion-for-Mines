@@ -39,8 +39,10 @@ public class UserService {
 
     public User updateUser(Long id, User user) {
         User existing = getUserById(id);
-        user.setId(existing.getId());
-        return repository.save(user);
+        existing.setFullName(user.getFullName());
+        existing.setEmail(user.getEmail());
+        if (user.getPhoneNumber() != null) existing.setPhoneNumber(user.getPhoneNumber());
+        return repository.save(existing);
     }
 
     public User assignMine(Long userId, Long mineId) {

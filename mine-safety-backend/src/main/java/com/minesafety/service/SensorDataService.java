@@ -67,20 +67,19 @@ public class SensorDataService {
         rp.setModelVersion(prediction.modelVersion());
         riskPredictionRepo.save(rp);
 
-        // 5. Auto-generate Alert if WARNING or CRITICAL (skip if active alert already exists for this zone)
+        // 5. Auto-generate Alert if WARNING or CRITICAL — delete existing active alert for zone and create fresh one
         if (finalLevel != RiskLevel.SAFE) {
-            boolean alreadyActive = !alertRepo.findByZoneAndStatus(saved.getZone(), AlertStatus.ACTIVE).isEmpty();
-            if (!alreadyActive) {
-                Alert alert = new Alert();
-                alert.setSensorData(saved);
-                alert.setMine(saved.getMine());
-                alert.setZone(saved.getZone());
-                alert.setRiskLevel(finalLevel);
-                alert.setAlertType(determineAlertType(saved));
-                alert.setMessage(buildAlertMessage(saved, finalLevel));
-                alert.setStatus(AlertStatus.ACTIVE);
-                alertRepo.save(alert);
-            }
+            List<Alert> existing = alertRepo.findByZoneAndStatus(saved.getZone(), AlertStatus.ACTIVE);
+            if (!existing.isEmpty()) alertRepo.deleteAll(existing);
+            Alert alert = new Alert();
+            alert.setSensorData(saved);
+            alert.setMine(saved.getMine());
+            alert.setZone(saved.getZone());
+            alert.setRiskLevel(finalLevel);
+            alert.setAlertType(determineAlertType(saved));
+            alert.setMessage(buildAlertMessage(saved, finalLevel));
+            alert.setStatus(AlertStatus.ACTIVE);
+            alertRepo.save(alert);
         }
 
         return saved;

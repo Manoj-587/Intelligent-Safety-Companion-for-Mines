@@ -36,12 +36,13 @@ public class AuthService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setStatus(Status.ACTIVE);
 
-        userRepo.save(user);
+        User saved = userRepo.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole().name(),
-            user.getAssignedMine() != null ? user.getAssignedMine().getId() : null,
-            user.getAssignedMine() != null ? user.getAssignedMine().getMineName() : null);
+        String token = jwtUtil.generateToken(saved.getEmail());
+        return new AuthResponse(saved.getId(), token, saved.getEmail(), saved.getFullName(), saved.getRole().name(),
+            saved.getPhoneNumber(), saved.getStatus().name(),
+            saved.getAssignedMine() != null ? saved.getAssignedMine().getId() : null,
+            saved.getAssignedMine() != null ? saved.getAssignedMine().getMineName() : null);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -53,7 +54,8 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole().name(),
+        return new AuthResponse(user.getId(), token, user.getEmail(), user.getFullName(), user.getRole().name(),
+            user.getPhoneNumber(), user.getStatus().name(),
             user.getAssignedMine() != null ? user.getAssignedMine().getId() : null,
             user.getAssignedMine() != null ? user.getAssignedMine().getMineName() : null);
     }

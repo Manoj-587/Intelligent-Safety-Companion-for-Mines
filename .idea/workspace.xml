@@ -5,68 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1aa8060-3b68-4161-a6f2-b2d8d5299225" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Intelligent-Safety-Companion-for-Mines.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/.eslintrc.cjs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/mine-safety-frontend/TODO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/public/vite.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/App.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/AuthContext.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/Navbar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/ProtectedRoute.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/TopNavbar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/api.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/components/RealtimeRiskGauge.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/main.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Alerts.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Dashboard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Login.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Mines.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Profile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Register.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Reports.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/RiskPredictions.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/SensorData.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Users.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Zones.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mine-safety-frontend/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/MineSafetyBackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/MineSafetyBackendApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/RiskPredictionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/RiskPredictionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/SensorDataController.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/SensorDataController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/AlertController.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/controller/AlertController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/dto/AuthResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/dto/AuthResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/Alert.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/Alert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/RiskPrediction.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/RiskPrediction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/SensorData.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/SensorData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/Zone.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/entity/Zone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/enums/AlertStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/enums/AlertStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/AlertRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/AlertRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/RiskPredictionRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/RiskPredictionRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/SensorDataRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/SensorDataRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/UserRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/repository/UserRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AlertService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AlertService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/RiskPredictionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/RiskPredictionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/DataSimulatorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/DataSimulatorService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/SensorDataService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/SensorDataService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/java/com/minesafety/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mine-safety-backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/AuthContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Alerts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Alerts.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mine-safety-frontend/src/pages/Profile.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +48,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.MineSafetyBackendApplication.executor": "Run",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Merging kk",
+    "git-widget-placeholder": "kk",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Intelligent_Safety_Companion_for_Mines/Intelligent-Safety-Companion-for-Mines",
@@ -135,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1771927206908</updated>
       <workItem from="1771927209279" duration="129000" />
-      <workItem from="1775450946860" duration="8585000" />
+      <workItem from="1775450946860" duration="21316000" />
     </task>
     <servers />
   </component>

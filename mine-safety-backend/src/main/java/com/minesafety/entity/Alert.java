@@ -1,5 +1,6 @@
 package com.minesafety.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.minesafety.enums.AlertStatus;
 import com.minesafety.enums.AlertType;
 import com.minesafety.enums.RiskLevel;
@@ -24,14 +25,17 @@ public class Alert {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sensor_data_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private SensorData sensorData;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mine_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Mine mine;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zone_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Zone zone;
 
     @Enumerated(EnumType.STRING)
@@ -58,5 +62,6 @@ public class Alert {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resolved_by")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User resolvedBy;
 }

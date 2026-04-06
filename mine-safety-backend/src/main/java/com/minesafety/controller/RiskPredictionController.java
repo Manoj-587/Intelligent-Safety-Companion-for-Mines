@@ -27,6 +27,11 @@ public class RiskPredictionController {
         return service.getAll();
     }
 
+    @GetMapping("/by-mine/{mineId}")
+    public List<RiskPrediction> getByMine(@PathVariable Long mineId) {
+        return service.getByMine(mineId);
+    }
+
     @GetMapping("/{id}")
     public RiskPrediction getById(@PathVariable Long id) {
         return service.getById(id);

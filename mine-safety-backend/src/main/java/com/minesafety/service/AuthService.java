@@ -39,7 +39,9 @@ public class AuthService {
         userRepo.save(user);
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole().name());
+        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole().name(),
+            user.getAssignedMine() != null ? user.getAssignedMine().getId() : null,
+            user.getAssignedMine() != null ? user.getAssignedMine().getMineName() : null);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -51,6 +53,8 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole().name());
+        return new AuthResponse(token, user.getEmail(), user.getFullName(), user.getRole().name(),
+            user.getAssignedMine() != null ? user.getAssignedMine().getId() : null,
+            user.getAssignedMine() != null ? user.getAssignedMine().getMineName() : null);
     }
 }

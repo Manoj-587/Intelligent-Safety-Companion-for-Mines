@@ -154,7 +154,7 @@ def predict():
         # generate_recommendations() consumes only predicted_risk and reasons
         # so it is fully decoupled from both the prediction and explanation
         # engines. Replacing either never affects this call.
-        rec_result = generate_recommendations(risk_level, explanation["reasons"])
+        rec_result = generate_recommendations(risk_level, explanation["reasons"], sensor_data)
         logger.info("Recommendations generated: %d item(s).", len(rec_result["recommendations"]))
 
         response = {

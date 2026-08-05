@@ -1,156 +1,217 @@
 """
 Mine Safety Risk Prediction — Recommendation Engine
 ====================================================
-Generates actionable safety recommendations by combining:
-  1. General recommendations based on the predicted risk level.
-  2. Dynamic recommendations derived from the explanation reasons.
+Generates context-aware safety recommendations driven by sensor threshold
+violations, not by keyword matching on reason strings.
 
-Architecture note — future compatibility
------------------------------------------
-This module consumes only two inputs:
-    predicted_risk  (str)   — "LOW", "MEDIUM", or "HIGH"
-    reasons         (list)  — list of explanation strings
+Public contract (unchanged):
+    generate_recommendations(predicted_risk, reasons, sensor_data) -> dict
 
-It does NOT depend on how those inputs were produced.  Whether the
-reasons come from the current Rule-Based Explanation Engine or a future
-Bayesian Network, this module requires zero changes.  The public
-contract:
-
-    generate_recommendations(predicted_risk, reasons) -> dict
-
-must remain identical.
+The `reasons` parameter is kept for API compatibility and future use by the
+Bayesian Network module.  Recommendations are generated solely from
+`sensor_data` thresholds so they never contradict the explanations.
 """
 
-# ── General recommendations by risk level ─────────────────────────────────────
-# These are always included regardless of the specific reasons.
-# Ordered from least to most urgent to match the risk escalation model.
+from explain import (
+    AN311_HIGH, AN422_HIGH, AN423_HIGH,
+    TP1721_HIGH, TP1711_HIGH,
+    RH1722_HIGH, RH1722_LOW, RH1712_HIGH, RH1712_LOW,
+    BA1723_LOW, BA1713_LOW,
+    MM264_HIGH, MM252_HIGH, MM261_HIGH, MM262_HIGH, MM263_HIGH, MM256_HIGH, MM211_HIGH,
+    CM861_HIGH, CR863_HIGH, P_864_HIGH, TC862_HIGH, WM868_HIGH,
+    AMP2_IR_HIGH, DMP3_IR_HIGH, AMP1_IR_HIGH, AMP5_IR_HIGH, DMP4_IR_HIGH,
+)
 
-_GENERAL_RECOMMENDATIONS = {
-    "LOW": [
-        "Continue normal mining operations.",
-        "Maintain routine environmental monitoring.",
-        "Follow standard safety procedures.",
-    ],
-    "MEDIUM": [
-        "Increase monitoring frequency.",
-        "Inspect mine ventilation systems.",
-        "Reduce worker exposure in the affected zone.",
-        "Inform the site supervisor immediately.",
-    ],
-    "HIGH": [
-        "Evacuate the affected area immediately.",
-        "Stop all drilling and blasting operations.",
-        "Notify the mine supervisor and emergency response team.",
-        "Increase ventilation immediately.",
-        "Restrict worker access until conditions normalize.",
-    ],
-}
+# ── Sensor-triggered recommendation rules ─────────────────────────────────────
+# Each entry: (condition_callable, list_of_recommendations)
+# condition receives the sensor_data dict and returns True when abnormal.
+# Add new rules here without touching generate_recommendations().
 
-# ── Dynamic recommendation rules ──────────────────────────────────────────────
-# Each entry maps a keyword (case-insensitive substring of a reason string)
-# to a list of additional recommendations triggered when that keyword appears
-# in any of the explanation reasons.
-#
-# Design principle: adding a new trigger requires only a new dict entry.
-# The evaluation loop in generate_recommendations() never needs to change.
+_SENSOR_RULES = [
+    (
+        lambda s: s["AN422"] >= AN422_HIGH or s["AN311"] >= AN311_HIGH or s["AN423"] >= AN423_HIGH,
+        [
+            "Stop all ignition sources immediately.",
+            "Increase mine ventilation to dilute gas concentration.",
+            "Check gas extraction and monitoring systems.",
+        ],
+    ),
+    (
+        lambda s: s["TP1721"] >= TP1721_HIGH or s["TP1711"] >= TP1711_HIGH,
+        [
+            "Reduce equipment load on affected mining machinery immediately.",
+            "Inspect mine ventilation, cooling and pressure control systems.",
+            "Monitor temperature continuously until levels stabilise.",
+        ],
+    ),
+    (
+        lambda s: s["RH1722"] >= RH1722_HIGH or s["RH1712"] >= RH1712_HIGH,
+        [
+            "Inspect moisture control systems and drainage in the affected zone.",
+            "Check for water ingress and leakage at identified locations.",
+        ],
+    ),
+    (
+        lambda s: s["RH1722"] <= RH1722_LOW or s["RH1712"] <= RH1712_LOW,
+        [
+            "Increase humidity control to reduce dust ignition risk.",
+            "Inspect ventilation for excessive drying.",
+        ],
+    ),
+    (
+        lambda s: s["BA1713"] <= BA1713_LOW or s["BA1723"] <= BA1723_LOW,
+        [
+            "Inspect mine ventilation, cooling and pressure control systems.",
+            "Check for abnormal underground structural conditions.",
+        ],
+    ),
+    (
+        lambda s: s["MM264"] >= MM264_HIGH or s["MM252"] >= MM252_HIGH
+                  or s["MM261"] >= MM261_HIGH or s["MM262"] >= MM262_HIGH
+                  or s["MM263"] >= MM263_HIGH or s["MM256"] >= MM256_HIGH
+                  or s["MM211"] >= MM211_HIGH,
+        [
+            "Suspend heavy machinery operations in the affected zone.",
+            "Inspect structural integrity of mine supports and roof.",
+            "Inspect rotating machinery for bearing wear and misalignment.",
+            "Schedule maintenance for affected mechanical equipment.",
+            "Monitor ground movement continuously.",
+        ],
+    ),
+    (
+        lambda s: s["CM861"] >= CM861_HIGH or s["CR863"] >= CR863_HIGH
+                  or s["P_864"] >= P_864_HIGH or s["TC862"] >= TC862_HIGH
+                  or s["WM868"] >= WM868_HIGH,
+        [
+            "Reduce equipment load on affected mining machinery immediately.",
+            "Inspect mining equipment (crusher, conveyor and pump) for overload, blockage, leaks and abnormal operation.",
+            "Isolate faulty equipment and notify the maintenance team.",
+        ],
+    ),
+    (
+        lambda s: s["AMP2_IR"] >= AMP2_IR_HIGH or s["AMP1_IR"] >= AMP1_IR_HIGH
+                  or s["AMP5_IR"] >= AMP5_IR_HIGH or s["DMP3_IR"] >= DMP3_IR_HIGH
+                  or s["DMP4_IR"] >= DMP4_IR_HIGH,
+        [
+            "Isolate overheating electrical equipment immediately.",
+            "Inspect electrical equipment, panels and cable insulation for overheating, abnormal heat signatures and electrical faults.",
+            "Monitor hotspot progression until equipment is cleared.",
+        ],
+    ),
+]
 
-_DYNAMIC_RECOMMENDATIONS = {
-    "gas": [
-        "Increase mine ventilation to dilute gas concentration.",
-        "Check gas extraction and monitoring systems.",
-        "Stop all ignition sources immediately.",
-    ],
-    "temperature": [
-        "Inspect cooling and ventilation equipment.",
-        "Reduce equipment load to lower heat generation.",
-        "Monitor temperature continuously until levels stabilize.",
-    ],
-    "humidity": [
-        "Check moisture control and dehumidification systems.",
-        "Inspect for water leakage in the affected zone.",
-        "Improve drainage if necessary.",
-    ],
-    "oxygen": [
-        "Inspect oxygen supply systems immediately.",
-        "Verify ventilation effectiveness in the affected area.",
-        "Remove workers from low-oxygen zones without delay.",
-    ],
-    "pressure": [
-        "Inspect pressure monitoring equipment.",
-        "Check for abnormal underground structural conditions.",
-    ],
-    "vibration": [
-        "Suspend heavy machinery operations in the affected zone.",
-        "Inspect structural integrity of mine supports.",
-        "Monitor ground movement continuously.",
-    ],
-    "infrared": [
-        "Inspect electrical equipment for overheating.",
-        "Check cable insulation and connections in the affected zone.",
-    ],
-}
+# ── Severity-ordered category definitions ───────────────────────────────────────────
+# Maps each raw recommendation string to its action category and prefix tag.
+# Category order mirrors the severity order used in explain.py.
+_REC_CATEGORIES = [
+    # (tag, prefix_label, keywords_that_identify_this_category)
+    # Immediate — actions required right now before conditions worsen
+    ("gas_stop",    "[Immediate]",  ["stop all ignition"]),
+    ("gas_vent",    "[Immediate]",  ["increase mine ventilation", "gas extraction"]),
+    ("ir_isolate",  "[Immediate]",  ["isolate overheating", "isolate faulty"]),
+    ("equip_load",  "[Immediate]",  ["reduce equipment load"]),
+    ("humidity_ig", "[Immediate]",  ["humidity control to reduce dust ignition"]),
+    # Inspection — equipment or structural checks
+    ("electrical",  "[Inspection]", ["electrical equipment, panels", "electrical equipment for"]),
+    ("equipment",   "[Inspection]", ["mining equipment", "crusher", "conveyor", "pump"]),
+    ("ventilation", "[Inspection]", ["mine ventilation, cooling", "cooling and pressure"]),
+    ("moisture",    "[Inspection]", ["moisture control", "water ingress", "excessive drying"]),
+    ("structural",  "[Inspection]", ["structural integrity", "structural conditions", "bearing wear", "mechanical equipment"]),
+    ("heavy_mach",  "[Inspection]", ["heavy machinery", "maintenance for affected"]),
+    # Monitoring — ongoing observation
+    ("mon_ground",  "[Monitoring]", ["monitor ground"]),
+    ("mon_temp",    "[Monitoring]", ["monitor temperature"]),
+    ("mon_hotspot", "[Monitoring]", ["monitor hotspot"]),
+    ("normal",      "[Monitoring]", ["normal mining", "routine environmental", "standard safety"]),
+]
+
+
+def _prefix_recommendations(raw: list) -> list:
+    """
+    Assign each raw recommendation string a severity-ordered prefix tag
+    ([Immediate], [Inspection], or [Monitoring]) and return the list
+    sorted by category severity.  Duplicates are removed.
+
+    This function is the only place that controls recommendation presentation.
+    _SENSOR_RULES and generate_recommendations() logic are completely untouched.
+    """
+    seen = set()
+    # Collect (sort_index, prefixed_string) pairs.
+    tagged = []
+    for item in raw:
+        if item in seen:
+            continue
+        seen.add(item)
+        lower = item.lower()
+        matched = False
+        for idx, (_, prefix, keywords) in enumerate(_REC_CATEGORIES):
+            if any(kw in lower for kw in keywords):
+                tagged.append((idx, f"{prefix} {item}"))
+                matched = True
+                break
+        if not matched:
+            tagged.append((len(_REC_CATEGORIES), f"[Monitoring] {item}"))
+
+    tagged.sort(key=lambda x: x[0])
+    return [text for _, text in tagged]
+
+
+# ── Default recommendations when all sensors are normal ───────────────────────
+_ALL_NORMAL = [
+    "Continue normal mining operations.",
+    "Maintain routine environmental monitoring.",
+    "Follow standard safety procedures.",
+]
 
 # ── Public API ─────────────────────────────────────────────────────────────────
 
-def generate_recommendations(predicted_risk: str, reasons: list) -> dict:
+def generate_recommendations(predicted_risk: str, reasons: list, sensor_data: dict = None) -> dict:
     """
-    Generate a deduplicated list of safety recommendations.
+    Generate deduplicated, severity-sorted, prefixed safety recommendations.
 
-    Combines general risk-level recommendations with dynamic recommendations
-    triggered by keywords found in the explanation reasons.
+    When sensor_data is provided, recommendations are driven exclusively by
+    threshold violations so they never contradict the explanation reasons.
+    Each recommendation is prefixed with its action category:
+        [Immediate]  — critical actions required right now
+        [Inspection] — equipment or structural checks required
+        [Monitoring] — ongoing observation actions
+
+    When sensor_data is absent (e.g. legacy callers), falls back to the
+    all-normal defaults.
 
     Parameters
     ----------
-    predicted_risk : str
-        Risk level from the prediction engine: "LOW", "MEDIUM", or "HIGH".
-    reasons : list[str]
-        Explanation strings produced by the explanation engine.
-        This function is agnostic to how these strings were generated.
+    predicted_risk : str   — "LOW", "MEDIUM", or "HIGH" (kept for compatibility).
+    reasons        : list  — explanation strings (kept for compatibility).
+    sensor_data    : dict  — sensor feature values keyed by column name.
 
     Returns
     -------
-    dict
-        {
-            "recommendations": [
-                "Evacuate the affected area immediately.",
-                "Increase mine ventilation to dilute gas concentration.",
-                ...
-            ]
-        }
+    dict  { "recommendations": [...] }
     """
-    # ── 1. Start with general recommendations for the risk level ──────────────
-    # Use a list to preserve insertion order (important for operator readability).
-    # A seen set tracks duplicates without disrupting order.
-    recommendations = []
-    seen = set()
+    if not sensor_data:
+        return {"recommendations": _prefix_recommendations(list(_ALL_NORMAL))}
 
-    for rec in _GENERAL_RECOMMENDATIONS.get(predicted_risk, []):
-        _add_unique(recommendations, seen, rec)
+    raw = []
+    seen_raw = set()
 
-    # ── 2. Add dynamic recommendations based on reason keywords ───────────────
-    # Join all reasons into one lowercase string for a single-pass keyword scan.
-    # This avoids O(n*m) nested loops and handles multi-word reasons cleanly.
-    combined_reasons = " ".join(reasons).lower()
+    for condition, recs in _SENSOR_RULES:
+        try:
+            if condition(sensor_data):
+                for rec in recs:
+                    _add_unique(raw, seen_raw, rec)
+        except (KeyError, TypeError, ValueError):
+            continue
 
-    for keyword, dynamic_recs in _DYNAMIC_RECOMMENDATIONS.items():
-        if keyword in combined_reasons:
-            for rec in dynamic_recs:
-                _add_unique(recommendations, seen, rec)
+    if not raw:
+        return {"recommendations": _prefix_recommendations(list(_ALL_NORMAL))}
 
-    # ── 3. Fallback — should never be reached in normal operation ─────────────
-    if not recommendations:
-        recommendations.append("Follow standard mine safety protocols.")
-
-    return {"recommendations": recommendations}
+    return {"recommendations": _prefix_recommendations(raw)}
 
 
 # ── Internal helper ────────────────────────────────────────────────────────────
 
-def _add_unique(recommendations: list, seen: set, item: str) -> None:
-    """
-    Append item to recommendations only if it has not been added before.
-    Preserves insertion order while guaranteeing no duplicates.
-    """
+def _add_unique(lst: list, seen: set, item: str) -> None:
     if item not in seen:
         seen.add(item)
-        recommendations.append(item)
+        lst.append(item)

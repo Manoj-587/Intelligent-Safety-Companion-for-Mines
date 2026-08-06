@@ -1,0 +1,139 @@
+server:
+  port: 8080
+
+# ── Mine Sensor Simulator ───────────────────────────────────────────────────
+simulation:
+  enabled: true
+  interval-ms: 5000
+
+# ── Database Configuration (MySQL + Spring Data JPA) ─────────────────────────
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/mine_safety?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: tiger
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# ── AIML Flask API ─────────────────────────────────────────────────────────────
+# The prediction engine runs as a separate Flask process.
+# Spring Boot calls it as an external service — never modifies it.
+aiml:
+  api:
+    base-url: http://localhost:5000
+    predict-endpoint: /predict
+    connect-timeout-ms: 3000
+    read-timeout-ms:    5000
+    retry:
+      max-attempts: 2           # maximum retry attempts for transient failures
+      delay-ms:     500         # fixed delay between retries
+    cache:
+      enabled:        true
+      expiration-ms:  60000     # cached prediction TTL — 60 seconds
+
+# ── LLM Engine (OpenRouter) ──────────────────────────────────────────────────
+llm:
+  base-url:   https://openrouter.ai/api/v1
+  api-key:    YOUR_OPENROUTER_API_KEY
+  model:      openai/gpt-4.1-mini
+  max-tokens: 1024
+  timeout-ms: 30000
+
+# ── Knowledge Base ─────────────────────────────────────────────────────────────
+# MarkdownKnowledgeSource recursively loads all .md files from domain subfolders.
+# Domain folders: gas/ emergency/ equipment/ ppe/ maintenance/ procedures/ first-aid/ general/
+# To add a new source (PDF, DB, Vector), implement KnowledgeSource and register as a Spring bean.
+knowledge:
+  base-path: knowledge/                     # classpath root — subfolders are scanned recursively
+  max-sections-per-query: 3                 # max documents injected into a single prompt
+
+# ── Conversation Memory ────────────────────────────────────────────────────────
+conversation:
+  max-history-turns: 10                     # number of user+AI turn pairs kept per session
+  session-expiration-ms: 1800000            # session TTL — 30 minutes of inactivity
+  expiry-sweep-ms: 60000                    # how often the expiry sweep runs (ms)
+
+# ── Prompt Builder ─────────────────────────────────────────────────────────────
+prompt:
+  templates-path: prompts/templates/        # classpath location of intent prompt templates
+  personas-path:  prompts/personas/         # classpath location of role persona templates
+  budget:
+    max-knowledge-docs:   3                 # max knowledge documents injected per prompt
+    max-history-turns:    6                 # max conversation turns injected (subset of memory)
+    max-prompt-chars:     12000             # hard cap on total assembled prompt length
+    max-doc-body-chars:   1500             # max characters taken from each knowledge document body
+
+# ── Safety Policy Engine ───────────────────────────────────────────────────────
+# Policy enforcement layer — provider-agnostic, runs before and after every LLM call.
+safety-policy:
+
+  # Minimum intent classification confidence required to proceed to LLM.
+  # Requests below this threshold are rejected with a clarification prompt.
+  min-confidence-threshold: 0.60
+
+  # LLM response phrases that contradict a HIGH-risk AIML prediction.
+  # If any appear in the LLM reply when risk is HIGH, the response is blocked.
+  contradiction-keywords:
+    - "safe to continue"
+    - "no immediate action"
+    - "risk is low"
+    - "no action required"
+    - "everything is fine"
+    - "no danger"
+    - "not dangerous"
+    - "you can proceed"
+
+  # Phrases that indicate a prompt injection attempt.
+  # Messages containing these are blocked before reaching the LLM.
+  injection-patterns:
+    - "ignore previous instructions"
+    - "ignore all instructions"
+    - "disregard your instructions"
+    - "forget your system prompt"
+    - "you are now"
+    - "act as"
+    - "pretend you are"
+    - "jailbreak"
+    - "do anything now"
+    - "dan mode"
+    - "override safety"
+    - "bypass safety"
+    - "disable safety"
+
+  # Intents that require AIML prediction data to be present before the LLM is called.
+  # If prediction data is absent for these intents, the request is blocked.
+  prediction-required-intents:
+    - RISK_EXPLANATION
+    - RECOMMENDATION_EXPLANATION
+
+  # Intents that require at least one knowledge document to be retrieved.
+  # If knowledge is empty for these intents, the LLM is not called.
+  knowledge-required-intents:
+    - EMERGENCY_GUIDANCE
+    - FIRST_AID
+
+  # Role-based intent authorization.
+  # Intents not listed here are accessible to all roles.
+  role-restrictions:
+    EQUIPMENT_HELP: [MAINTENANCE, SUPERVISOR, SAFETY_OFFICER]
+
+# ── CORS ───────────────────────────────────────────────────────────────────────
+# Allow the React dev server during development.
+# Tighten this to the production domain before deployment.
+cors:
+  allowed-origins:
+    - http://localhost:5173
+    - http://localhost:3000
+
+# ── Logging ────────────────────────────────────────────────────────────────────
+logging:
+  level:
+    com.minecompanion: DEBUG
+    org.springframework.web: INFO

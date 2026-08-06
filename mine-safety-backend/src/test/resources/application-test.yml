@@ -1,0 +1,84 @@
+aiml:
+  api:
+    base-url: http://localhost:5000
+    predict-endpoint: /predict
+    connect-timeout-ms: 3000
+    read-timeout-ms:    5000
+    retry:
+      max-attempts: 2
+      delay-ms:     500
+    cache:
+      enabled:       true
+      expiration-ms: 60000
+
+llm:
+  provider: openrouter
+  openrouter:
+    base-url:   https://openrouter.ai/api/v1
+    model:      openai/gpt-4.1-mini
+    api-key:    test-key
+    timeout-ms: 15000
+  openai:
+    base-url:   https://api.openai.com
+    model:      gpt-4o-mini
+    api-key:    test-key
+    timeout-ms: 15000
+  ollama:
+    base-url:   http://localhost:11434
+    model:      llama3
+    timeout-ms: 30000
+
+knowledge:
+  base-path: knowledge/
+  max-sections-per-query: 3
+
+conversation:
+  max-history-turns: 10
+
+prompt:
+  templates-path: prompts/templates/
+  personas-path:  prompts/personas/
+  budget:
+    max-knowledge-docs:  3
+    max-history-turns:   6
+    max-prompt-chars:    12000
+    max-doc-body-chars:  1500
+
+safety-policy:
+  min-confidence-threshold: 0.60
+  contradiction-keywords:
+    - "safe to continue"
+    - "no immediate action"
+    - "risk is low"
+    - "no action required"
+    - "everything is fine"
+    - "no danger"
+    - "not dangerous"
+    - "you can proceed"
+  injection-patterns:
+    - "ignore previous instructions"
+    - "ignore all instructions"
+    - "disregard your instructions"
+    - "forget your system prompt"
+    - "you are now"
+    - "act as"
+    - "pretend you are"
+    - "jailbreak"
+    - "do anything now"
+    - "dan mode"
+    - "override safety"
+    - "bypass safety"
+    - "disable safety"
+  prediction-required-intents:
+    - RISK_EXPLANATION
+    - RECOMMENDATION_EXPLANATION
+  knowledge-required-intents:
+    - EMERGENCY_GUIDANCE
+    - FIRST_AID
+  role-restrictions:
+    EQUIPMENT_HELP: [MAINTENANCE, SUPERVISOR, SAFETY_OFFICER]
+
+cors:
+  allowed-origins:
+    - http://localhost:5173
+    - http://localhost:3000
